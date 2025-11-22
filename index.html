@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>S. Bullock - Engineering Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              cad: {
+                bg: '#1e1e1e',       // Canvas background (Dark)
+                grid: '#333333',     // Grid lines
+                wire: '#ffd700',     // Gold wires
+                bus: '#4fc3f7',      // Light blue bus
+                component: '#dcdcdc',// Component body
+                select: '#ff4081',   // Pink selection
+                ui: '#252526',       // Main UI background
+                uiDark: '#1e1e1e',   // Input backgrounds
+                uiLight: '#333333',  // Hover states
+                uiBorder: '#454545', // Borders
+                accent: '#007acc',   // VS Blue accent
+                text: '#cccccc',     // Main text
+                textMuted: '#858585' // Secondary text
+              },
+              pcb: {
+                base: '#1a3300',
+                trace: '#33cc33',
+                pad: '#e6c200',
+                silk: '#ffffff',
+              },
+              hud: {
+                green: '#00ff41',
+                dark: 'rgba(0, 20, 0, 0.9)',
+              }
+            },
+            fontFamily: {
+              mono: ['"Consolas"', '"Monaco"', '"Courier New"', 'monospace'],
+              sans: ['"Segoe UI"', 'Inter', 'system-ui', 'sans-serif'],
+            },
+            cursor: {
+              crosshair: 'crosshair',
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      /* Modern Dark Scrollbar */
+      ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #1e1e1e;
+        border-left: 1px solid #333;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #424242;
+        border-radius: 5px;
+        border: 2px solid #1e1e1e;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #505050;
+      }
+      body {
+        background-color: #1e1e1e;
+        color: #cccccc;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "phosphor-react": "https://aistudiocdn.com/phosphor-react@^1.4.1"
+  }
+}
+</script>
+</head>
+  <body class="h-screen w-screen overflow-hidden select-none text-sm">
+    <div id="root"></div>
+  </body>
+</html>

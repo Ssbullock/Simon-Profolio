@@ -1,0 +1,5 @@
+{
+  "name": "DxPortfolio: Engineer Edition",
+  "description": "A portfolio website mimicking legacy circuit design software (CAD) with schematic interfaces, CLI interaction, and PCB-styled project details.",
+  "requestFramePermissions": []
+}
