@@ -3,41 +3,169 @@ import { Layout } from './components/Layout';
 import { Sidebar } from './components/Sidebar';
 import { SchematicCanvas } from './components/SchematicCanvas';
 import { CommandPrompt } from './components/CommandPrompt';
-import { ProjectDetail } from './components/ProjectDetail';
-import { PROJECTS, WIRES, FILE_TREE } from './constants';
-import { ViewMode } from './types';
+import { DocumentationWiki } from './components/DocumentationWiki';
+import { PROJECTS, WIRES, FILE_TREE, PASSIVES, REGIONS } from './constants';
+import { ViewMode, ToolType } from './types';
 
 const App: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.SCHEMATIC);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(true);
+  const [activeTool, setActiveTool] = useState<ToolType>('SELECT');
+  const [scale, setScale] = useState(0.8);
+  
+  // Terminal History State - Lifted from CommandPrompt
+  const [terminalHistory, setTerminalHistory] = useState<string[]>([
+    'DxDesigner Pro v2025.1.0',
+    'Copyright (c) Simon Bullock 2025',
+    'Loading system libraries... Done.',
+    'Type "help" for available commands.'
+  ]);
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setIsSidebarOpen(false);
+      setScale(0.4);
+    }
+  }, []);
+
+  const addToTerminal = (msg: string) => {
+    setTerminalHistory(prev => [...prev, msg]);
+    // Ensure terminal opens to show the message
+    setIsTerminalOpen(true);
+  };
 
   const handleSelectProject = (id: string) => {
     setSelectedProjectId(id);
-    // In real DxDesigner, selecting highlights. Double click opens. 
-    // Here we simplify: Click -> Highlight, then show detail if clicked again or separate logic.
-    // Let's make it: Select highlights. 
-    // But to see detail, we set view mode.
-    
-    // For this UX, let's auto-open detail if not already open, or maybe just a delay?
-    // Let's stick to the requirement: "Clicking a component brings up a new page".
-    
-    if (id === selectedProjectId) {
-        setViewMode(ViewMode.PCB_DETAIL);
-    } else {
-        setSelectedProjectId(id);
-        setViewMode(ViewMode.PCB_DETAIL);
-    }
+    // Direct to Documentation now, skipping PCB_DETAIL popup
+    setViewMode(ViewMode.DOCUMENTATION);
+    setIsSidebarOpen(false);
+    setIsTerminalOpen(false); 
   };
 
   const handleCloseDetail = () => {
     setViewMode(ViewMode.SCHEMATIC);
-    // Keep selection for context
+    if (window.innerWidth >= 768) {
+        setIsSidebarOpen(true);
+    }
+  };
+
+  const handleNextProject = () => {
+    if (!selectedProjectId) return;
+    const currentIndex = PROJECTS.findIndex(p => p.id === selectedProjectId);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + 1) % PROJECTS.length;
+    setSelectedProjectId(PROJECTS[nextIndex].id);
+  };
+
+  const handleZoomIn = () => setScale(prev => Math.min(prev * 1.2, 5));
+  const handleZoomOut = () => setScale(prev => Math.max(prev * 0.8, 0.1));
+
+  // Handle Logic from Menus and Toolbar
+  const handleSystemAction = (action: string) => {
+    switch (action) {
+        case 'Save':
+            addToTerminal('Saving Portfolio_Resume.pdf...');
+            setTimeout(() => {
+                addToTerminal('Download started.');
+                const link = document.createElement('a');
+                link.href = '/resume.pdf'; 
+                link.download = 'Simon_Bullock_Resume.pdf';
+                addToTerminal('(Mock) File saved to local disk.');
+            }, 800);
+            break;
+        case 'Print':
+            addToTerminal('Sending job to printer...');
+            setTimeout(() => window.print(), 500);
+            break;
+        case 'Simulation':
+            addToTerminal('Initializing Logic Simulation...');
+            setTimeout(() => addToTerminal('Analyzing Career Trajectory... [OK]'), 600);
+            setTimeout(() => addToTerminal('Checking Skillset Integrity... [100%]'), 1200);
+            setTimeout(() => addToTerminal('Simulation Complete: Candidate is ready for hire.'), 1800);
+            break;
+        case 'Place':
+            navigator.clipboard.writeText('simonscholar155@gmail.com');
+            addToTerminal('Contact Email copied to clipboard.');
+            break;
+        case 'Settings':
+            addToTerminal('Opening System Preferences... (Access Denied: Read-Only Mode)');
+            break;
+        case 'BOM':
+            addToTerminal('Generating Bill of Materials...');
+            addToTerminal(`Total Components: ${PROJECTS.length + PASSIVES.length}`);
+            addToTerminal('Export complete.');
+            break;
+        default:
+            addToTerminal(`Command '${action}' selected.`);
+    }
+  };
+
+  // Handle Terminal Input
+  const handleTerminalCommand = (input: string) => {
+      const cmd = input.trim().toLowerCase();
+      const args = cmd.split(' ');
+      const action = args[0];
+
+      const newLog = [`user@simon-ws:~$ ${input}`];
+
+      switch (action) {
+        case 'help':
+            newLog.push(
+            'Available commands:',
+            '  list              - List all projects/components',
+            '  open <refDes>     - Open project details',
+            '  resume            - Display summary',
+            '  contact           - Show contact info',
+            '  clear             - Clear console'
+            );
+            break;
+        case 'list':
+            PROJECTS.forEach(p => {
+            newLog.push(`  [${p.type}] ${p.refDes.padEnd(12)} : ${p.title}`);
+            });
+            break;
+        case 'open':
+            if (args[1]) {
+            const target = PROJECTS.find(p => p.refDes.toLowerCase() === args[1].toLowerCase());
+            if (target) {
+                handleSelectProject(target.id);
+                newLog.push(`Opening design files for: ${target.title}...`);
+            } else {
+                newLog.push(`Error 404: Component '${args[1]}' not found.`);
+            }
+            } else {
+            newLog.push('Usage: open <refDes>');
+            }
+            break;
+        case 'resume':
+            newLog.push('Simon Bullock | B.S. EE & M.S. ECE', 'Status: Open to collaboration');
+            break;
+        case 'contact':
+            newLog.push('Email: simonscholar155@gmail.com');
+            break;
+        case 'clear':
+            setTerminalHistory([]);
+            return;
+        default:
+            newLog.push(`Command '${action}' not recognized.`);
+      }
+      setTerminalHistory(prev => [...prev, ...newLog]);
   };
 
   const selectedProject = PROJECTS.find(p => p.id === selectedProjectId);
 
   return (
     <Layout
+      isSidebarOpen={isSidebarOpen}
+      onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+      isTerminalOpen={isTerminalOpen}
+      activeTool={activeTool}
+      setActiveTool={setActiveTool}
+      onZoomIn={handleZoomIn}
+      onZoomOut={handleZoomOut}
+      onSystemAction={handleSystemAction}
       sidebar={
         <Sidebar 
           nodes={FILE_TREE} 
@@ -47,21 +175,32 @@ const App: React.FC = () => {
       bottomPanel={
         <CommandPrompt 
           projects={PROJECTS} 
-          onSelect={handleSelectProject} 
+          onSelect={handleSelectProject}
+          isExpanded={isTerminalOpen}
+          onToggleExpand={() => setIsTerminalOpen(!isTerminalOpen)}
+          history={terminalHistory}
+          onCommand={handleTerminalCommand}
         />
       }
     >
       <SchematicCanvas 
         projects={PROJECTS} 
-        wires={WIRES} 
+        wires={WIRES}
+        passives={PASSIVES}
+        regions={REGIONS}
         selectedProjectId={selectedProjectId}
         onSelectProject={handleSelectProject}
+        activeTool={activeTool}
+        scale={scale}
+        setScale={setScale}
       />
 
-      {viewMode === ViewMode.PCB_DETAIL && selectedProject && (
-        <ProjectDetail 
-          project={selectedProject} 
-          onClose={handleCloseDetail} 
+      {viewMode === ViewMode.DOCUMENTATION && selectedProject && (
+        <DocumentationWiki 
+            project={selectedProject}
+            onBack={() => setViewMode(ViewMode.SCHEMATIC)}
+            onClose={() => setViewMode(ViewMode.SCHEMATIC)}
+            onNext={handleNextProject}
         />
       )}
     </Layout>

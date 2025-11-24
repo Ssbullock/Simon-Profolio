@@ -1,145 +1,176 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Project } from '../types';
-import { X, Cpu, Calendar, CheckCircle, ArrowRight } from 'phosphor-react';
+import { X, ArrowRight, CaretRight } from 'phosphor-react';
 
 interface Props {
   project: Project;
   onClose: () => void;
+  onViewDocumentation: () => void;
+  onNext: () => void;
 }
 
-export const ProjectDetail: React.FC<Props> = ({ project, onClose }) => {
+export const ProjectDetail: React.FC<Props> = ({ project, onClose, onViewDocumentation, onNext }) => {
+  const [activeTab, setActiveTab] = useState<'General' | 'Parameters'>('General');
+
+  // Helper to render property rows
+  const PropRow = ({ label, value }: { label: string, value: string | React.ReactNode }) => (
+    <div className="grid grid-cols-3 gap-2 py-1 border-b border-[#333] last:border-0 hover:bg-[#2a2a2a]">
+      <div className="col-span-1 text-xs text-gray-400 font-medium pl-1">{label}</div>
+      <div className="col-span-2 text-xs text-white font-mono truncate select-all">{value}</div>
+    </div>
+  );
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+    e.currentTarget.src = `https://placehold.co/400x400/1a1a1a/444444?text=Missing+Asset:+${project.refDes}`;
+  };
+
   return (
-    <div className="fixed inset-0 z-[100] bg-[#0f0f0f] text-gray-200 flex flex-col animate-in fade-in duration-200 font-sans">
+    <div className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
       
-      {/* Top Navigation Bar */}
-      <div className="h-16 flex items-center justify-between px-6 bg-[#181818] border-b border-[#333]">
-        <div className="flex items-center gap-4">
+      {/* Property Window Container */}
+      <div className="w-full max-w-4xl h-[600px] bg-[#1e1e1e] border border-[#454545] shadow-2xl flex flex-col font-sans animate-in zoom-in-95 duration-200">
+        
+        {/* Title Bar */}
+        <div className="h-8 bg-[#2d2d2d] flex items-center justify-between px-3 border-b border-[#454545] select-none">
+          <div className="text-xs text-gray-300 font-bold flex items-center gap-2">
+            <div className="w-3 h-3 bg-cad-accent/80 rounded-sm"></div>
+            Component Properties - {project.refDes}
+          </div>
+          <button onClick={onClose} className="hover:bg-red-500 hover:text-white p-1 rounded transition-colors text-gray-400">
+            <X size={14} weight="bold" />
+          </button>
+        </div>
+
+        {/* Tab Bar */}
+        <div className="bg-[#252526] px-2 pt-2 border-b border-[#454545] flex gap-1 select-none">
+          {['General', 'Parameters'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab as any)}
+              className={`
+                px-4 py-1.5 text-xs rounded-t-sm transition-colors border-t border-l border-r
+                ${activeTab === tab 
+                  ? 'bg-[#1e1e1e] text-white border-[#454545] border-b-[#1e1e1e] translate-y-[1px]' 
+                  : 'bg-[#2d2d2d] text-gray-400 border-transparent hover:bg-[#333]'
+                }
+              `}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex overflow-hidden">
+          
+          {/* Left Column - Property Grid */}
+          <div className="flex-1 border-r border-[#454545] flex flex-col overflow-hidden">
+             
+             {/* Toolbar / Header */}
+             <div className="bg-[#252526] p-2 border-b border-[#333] flex items-center gap-2">
+                 <div className="w-8 h-8 bg-[#111] border border-[#444] flex items-center justify-center">
+                    <span className="text-cad-accent font-bold text-xs">{project.type.substring(0,2)}</span>
+                 </div>
+                 <div>
+                     <div className="text-sm font-bold text-white">{project.refDes}</div>
+                     <div className="text-xs text-gray-500">{project.title}</div>
+                 </div>
+             </div>
+
+             <div className="flex-1 overflow-y-auto p-2 bg-[#1e1e1e]">
+                {activeTab === 'General' && (
+                  <div className="border border-[#333] bg-[#252526]">
+                    <div className="bg-[#333] px-2 py-1 text-[10px] font-bold text-gray-300 uppercase">Identification</div>
+                    <div className="p-1">
+                      <PropRow label="Name" value={project.title} />
+                      <PropRow label="Ref Designator" value={project.refDes} />
+                      <PropRow label="Part Type" value={project.type} />
+                      <PropRow label="Library ID" value={project.id.toUpperCase()} />
+                    </div>
+
+                    <div className="bg-[#333] px-2 py-1 text-[10px] font-bold text-gray-300 uppercase mt-2">Metadata</div>
+                    <div className="p-1">
+                      <PropRow label="Date" value={project.date || "N/A"} />
+                      <PropRow label="Location" value={project.location || "N/A"} />
+                      <PropRow label="Status" value="RELEASED" />
+                    </div>
+
+                    <div className="bg-[#333] px-2 py-1 text-[10px] font-bold text-gray-300 uppercase mt-2">Description</div>
+                    <div className="p-2 text-xs text-gray-300 leading-relaxed font-mono bg-[#111] border-t border-[#333]">
+                      {project.description}
+                    </div>
+                  </div>
+                )}
+
+                {activeTab === 'Parameters' && (
+                   <div className="border border-[#333] bg-[#252526] h-full flex flex-col">
+                      <div className="bg-[#333] grid grid-cols-2 px-2 py-1 text-[10px] font-bold text-gray-300 border-b border-black">
+                         <div>NAME</div>
+                         <div>VALUE</div>
+                      </div>
+                      <div className="flex-1 overflow-y-auto">
+                          {project.tags.map((tag, i) => (
+                             <div key={i} className="grid grid-cols-2 px-2 py-1 border-b border-[#333] hover:bg-[#2a2a2a] text-xs font-mono">
+                                <div className="text-cad-bus">SKILL_{i+1}</div>
+                                <div className="text-gray-300">{tag}</div>
+                             </div>
+                          ))}
+                          <div className="grid grid-cols-2 px-2 py-1 border-b border-[#333] hover:bg-[#2a2a2a] text-xs font-mono">
+                                <div className="text-cad-bus">HAS_DOCS</div>
+                                <div className="text-gray-300">TRUE</div>
+                             </div>
+                      </div>
+                   </div>
+                )}
+             </div>
+          </div>
+
+          {/* Right Column - Preview Image & Actions */}
+          <div className="w-[300px] flex flex-col bg-[#252526]">
+             <div className="p-2 border-b border-[#454545] text-xs font-bold text-gray-400">PREVIEW</div>
+             <div className="flex-1 p-4 flex items-center justify-center bg-[#111] overflow-hidden relative">
+                 {/* Grid BG */}
+                 <div className="absolute inset-0 opacity-20" style={{backgroundImage: 'radial-gradient(#444 1px, transparent 1px)', backgroundSize: '10px 10px'}}></div>
+                 <img src={project.imageUrl} onError={handleImageError} alt="Preview" className="max-w-full max-h-full object-contain border border-[#333] shadow-lg relative z-10" />
+             </div>
+             
+             {/* Action Area */}
+             <div className="p-3 border-t border-[#454545] bg-[#2d2d2d] space-y-2">
+                <button 
+                  onClick={onViewDocumentation}
+                  className="w-full py-2 bg-[#3c3c3c] hover:bg-cad-accent border border-[#555] text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm"
+                >
+                   <span>Open Documentation</span>
+                   <ArrowRight weight="bold" />
+                </button>
+                <div className="text-[10px] text-gray-500 text-center">
+                    Click to view full technical specification.
+                </div>
+             </div>
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <div className="h-10 bg-[#2d2d2d] border-t border-[#454545] flex items-center justify-between px-3 gap-2">
            <button 
-             onClick={onClose} 
-             className="group flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#333] transition-all duration-200 focus:outline-none"
+                onClick={onNext}
+                className="flex items-center gap-2 px-4 py-1 text-gray-400 hover:text-white hover:bg-[#3c3c3c] rounded-sm text-xs transition-colors"
            >
-              <X size={20} className="text-gray-400 group-hover:text-white" />
+               <span>View Next Component</span>
+               <CaretRight weight="bold" />
            </button>
-           <div className="h-6 w-[1px] bg-[#333]"></div>
-           <div className="flex flex-col justify-center">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500 font-semibold">Component Properties</span>
-              <span className="text-sm font-bold text-white tracking-wide font-mono">{project.refDes} // {project.title}</span>
+
+           <div className="flex gap-2">
+               <button onClick={onClose} className="px-6 py-1 bg-[#3c3c3c] hover:bg-[#4c4c4c] border border-[#555] text-white text-xs shadow-sm rounded-sm">
+                 OK
+               </button>
+               <button onClick={onClose} className="px-6 py-1 bg-[#3c3c3c] hover:bg-[#4c4c4c] border border-[#555] text-white text-xs shadow-sm rounded-sm">
+                 Cancel
+               </button>
            </div>
         </div>
-        
-        <div className="hidden md:flex items-center gap-6 text-xs font-mono text-gray-500">
-             <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                <span>SYSTEM: ONLINE</span>
-             </div>
-             <span>REVISION: A.02</span>
-        </div>
-      </div>
 
-      {/* Main Content Area - Split View */}
-      <div className="flex-1 overflow-hidden flex flex-col lg:flex-row">
-        
-        {/* Left Column: Visuals (Immersive) */}
-        <div className="lg:w-[55%] w-full h-1/2 lg:h-full bg-[#050505] relative flex items-center justify-center p-0 lg:p-12 overflow-hidden group">
-            
-            {/* Subtle Grid Background */}
-            <div className="absolute inset-0 opacity-10 pointer-events-none" 
-                style={{ 
-                    backgroundImage: 'linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)', 
-                    backgroundSize: '40px 40px' 
-                }}>
-            </div>
-
-            {/* Image Container */}
-            <div className="relative w-full h-full flex items-center justify-center p-4">
-                <img 
-                    src={project.imageUrl} 
-                    alt={project.title} 
-                    className="max-w-full max-h-full object-contain rounded shadow-2xl ring-1 ring-white/10 group-hover:ring-white/20 transition-all duration-500"
-                />
-            </div>
-
-            {/* Floating Label bottom left */}
-            <div className="absolute bottom-6 left-6 bg-black/80 backdrop-blur border border-white/10 px-4 py-2 rounded text-xs font-mono text-gray-400 hidden lg:block">
-                IMG_SOURCE: {project.id.toUpperCase()}.JPG <br/>
-                RES: HIGH_FIDELITY
-            </div>
-        </div>
-
-        {/* Right Column: Technical Data (Clean & Structured) */}
-        <div className="lg:w-[45%] w-full h-1/2 lg:h-full bg-[#121212] border-l border-[#2a2a2a] flex flex-col">
-            
-            {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto custom-scrollbar p-8 lg:p-12">
-                <div className="max-w-xl mx-auto space-y-10">
-                    
-                    {/* Header Section */}
-                    <div className="space-y-4">
-                        <div className="inline-flex items-center gap-2 px-2 py-1 bg-blue-500/10 border border-blue-500/20 rounded text-blue-400 text-[10px] font-bold uppercase tracking-wider">
-                            <Cpu size={12} weight="fill" />
-                            {project.type} Unit
-                        </div>
-                        <h1 className="text-4xl lg:text-5xl font-light text-white leading-tight tracking-tight">
-                            {project.title}
-                        </h1>
-                        <p className="text-lg text-gray-400 font-light leading-relaxed">
-                            {project.description}
-                        </p>
-                    </div>
-
-                    {/* Divider */}
-                    <div className="h-px bg-gradient-to-r from-[#333] to-transparent"></div>
-
-                    {/* Details Section */}
-                    <div className="space-y-4">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                            <CheckCircle size={14} />
-                            Technical Description
-                        </h3>
-                        <p className="text-sm lg:text-base text-gray-300 leading-7 font-light">
-                            {project.details}
-                        </p>
-                    </div>
-
-                    {/* Specs / Tags Grid */}
-                    <div className="space-y-4">
-                        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-                            Specifications / Skills
-                        </h3>
-                        <div className="flex flex-wrap gap-2">
-                            {project.tags.map(tag => (
-                                <span key={tag} className="px-3 py-1.5 bg-[#1e1e1e] border border-[#333] text-gray-300 text-xs font-medium rounded hover:border-gray-500 hover:text-white transition-colors cursor-default flex items-center gap-2">
-                                    {tag}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-                    
-                    {/* Links / Actions */}
-                    <div className="pt-4">
-                        <button className="group flex items-center gap-3 text-sm text-white font-medium hover:text-blue-400 transition-colors">
-                            View Documentation 
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                        </button>
-                    </div>
-
-                </div>
-            </div>
-
-            {/* Footer Panel */}
-            <div className="p-6 bg-[#0f0f0f] border-t border-[#2a2a2a]">
-                <div className="flex items-center justify-between text-[10px] text-gray-600 font-mono uppercase">
-                    <div>
-                        Last Updated: <span className="text-gray-400">2025-04-12</span>
-                    </div>
-                    <div className="flex gap-4">
-                        <span>ID: {project.id}</span>
-                        <span>Coord: {project.x},{project.y}</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
       </div>
     </div>
   );
