@@ -12,7 +12,7 @@ export const REGIONS: SchematicRegion[] = [
     y: 100,
     width: 500,
     height: 800,
-    color: '#00ff00' // Neon Greenish
+    color: 'var(--cad-accent)' // Neon Greenish -> Accent
   },
   {
     id: 'region_proj',
@@ -21,7 +21,7 @@ export const REGIONS: SchematicRegion[] = [
     y: 100,
     width: 750,
     height: 600, // Expanded for Pololu
-    color: '#ffff00' // Yellow
+    color: 'var(--cad-wire)' // Yellow
   },
   {
     id: 'region_personal',
@@ -30,7 +30,7 @@ export const REGIONS: SchematicRegion[] = [
     y: 730, // Shifted down
     width: 750,
     height: 500, // Expanded for Arm & Hydroponics
-    color: '#00ffff' // Cyan
+    color: 'var(--cad-bus)' // Cyan
   }
 ];
 
@@ -66,8 +66,7 @@ export const PROJECTS: Project[] = [
     results: 'Successfully deployed a reliable, scalable test environment compliant with aerospace standards. Reduced setup time for pressure transducer testing by integrating automated switching matrices.',
     context: 'Testing military engine controllers requires simulating extreme operating conditions on the ground. The test stand acts as the "engine" during verification.',
     tags: ['Xpedition', 'Test Stand', 'PCB Design', 'Hardware Integration'],
-    imageUrl: '/assets/test_equipemt/fadec1.jpeg', // Path updated as requested
-    additionalImages: ['/assets/test_equipemt/fadec2.jpeg'],
+    imageUrl: '/assets/test_equipment/TE.jpeg',
     x: 250,
     y: 550,
     type: 'IC',
@@ -85,7 +84,8 @@ export const PROJECTS: Project[] = [
     results: 'Meticulously populated schedules ensured 100% compliance with industry safety regulations. delivered electrical floor plans ahead of schedule.',
     context: 'Infrastructure power distribution requires precise load balancing to prevent outages and ensure safety in commercial buildings.',
     tags: ['Power', 'AutoCAD', 'Revit', 'Load Calcs'],
-    imageUrl: '/assets/gannet/gannett1.jpeg', // Path updated as requested
+    imageUrl: '/assets/gannett/IMG_9829.jpeg',
+    additionalImages: ['/assets/gannett/IMG_9910.jpeg'],
     x: 250,
     y: 800,
     type: 'IC',
@@ -105,17 +105,12 @@ export const PROJECTS: Project[] = [
     results: 'Achieved rapid system response times allowing for practical use while riding. Successfully demonstrated voice-controlled shifting in a noisy outdoor environment.',
     context: 'Traditional gear shifters can be difficult for riders with limited hand mobility. Voice control offers an inclusive alternative.',
     tags: ['Python', 'C++', 'Raspberry Pi', 'Arduino', 'Embedded'],
-    imageUrl: '/assets/bike/bike1.jpeg',
+    imageUrl: '/assets/senior_design/IMG_3864.jpeg',
     additionalImages: [
-        '/assets/bike/bike2.jpeg',
-        '/assets/bike/bike3.jpeg',
-        '/assets/bike/bike4.jpeg',
-        '/assets/bike/bike5.jpeg',
-        '/assets/bike/bike6.jpeg',
-        '/assets/bike/bike7.jpeg',
-        '/assets/bike/bike8.jpeg',
-        '/assets/bike/bike9.jpeg',
-        '/assets/bike/bike10.jpeg',
+      '/assets/senior_design/IMG_2500.jpeg',
+      '/assets/senior_design/IMG_2499.jpeg',
+      '/assets/senior_design/IMG_2365.JPG',
+      '/assets/senior_design/exported_055BF9C6-8263-441B-9C95-E5D0C94509F2.JPG'
     ],
     x: 800,
     y: 200,
@@ -134,13 +129,13 @@ export const PROJECTS: Project[] = [
     results: 'Delivered a final architecture and technical presentation that was approved for prototyping. Created a reusable design block for future actuator projects.',
     context: 'Actuator control is central to flight surfaces and engine control. A universal board reduces cost and design time for new vehicle programs.',
     tags: ['Analog Design', 'Control Theory', 'Hardware Arch'],
-    imageUrl: '/assets/acb/CAD.jpeg',
+    imageUrl: '/assets/ACB/IMG_31D44099-3337-412B-B1CF-521FC5CF6188.JPEG',
     additionalImages: [
-        '/assets/acb/visio.jpeg'
+      '/assets/ACB/IMG_84535F58-ECE4-4BA8-A59F-E1FDFA894A30.JPEG'
     ],
     x: 1100,
     y: 200,
-    type: 'OPAMP',
+    type: 'IC',
     date: 'Aug 2024 - May 2025',
     location: 'Endicott, NY'
   },
@@ -155,7 +150,7 @@ export const PROJECTS: Project[] = [
     results: 'Successfully navigated the competition grid, avoiding all obstacles and accurately identifying mine locations within the time limit.',
     context: 'Autonomous navigation requires tight integration between sensor inputs and motor output loops.',
     tags: ['C++', 'Embedded', 'PWM', 'Robotics', 'Sensors'],
-    imageUrl: '/assets/pololu/robot1.jpeg', // Placeholder/Assumed path
+    imageUrl: '/assets/sophmore_design/exported_7C31359D-8BF6-4D95-937B-A4F22B58D0E6.JPG',
     x: 800,
     y: 480,
     type: 'IC',
@@ -173,14 +168,14 @@ export const PROJECTS: Project[] = [
     results: 'Built a fully functional prototype that could distinguish between different metal types based on frequency shifts. Successfully integrated analog and digital domains.',
     context: 'A classic engineering challenge that demonstrates mastery of electromagnetic coupling and oscillator theory.',
     tags: ['FPGA', 'Verilog', 'Analog Circuits', 'Oscillators'],
-    imageUrl: '/assets/copitts/copitts1.jpeg',
+    imageUrl: '/assets/Copitts/IMG_9151 2.jpeg',
     additionalImages: [
-        '/assets/copitts/copitts2.jpeg',
-        '/assets/copitts/bike11.jpeg' 
+      '/assets/Copitts/IMG_9152.jpeg',
+      '/assets/Copitts/IMG_9153.jpeg'
     ],
     x: 1100,
     y: 480,
-    type: 'CONNECTOR',
+    type: 'IC',
     date: 'April 2023 - May 2023',
     location: 'Binghamton, NY'
   },
@@ -197,11 +192,11 @@ export const PROJECTS: Project[] = [
     results: 'Launched a functional MVP featuring 11+ meditation styles and real-time background music mixing. Successfully integrated Stripe for subscription payments.',
     context: 'Generic meditation apps lack personalization. Serene solves this by creating unique content for every user session based on their immediate emotional state.',
     tags: ['React Native', 'Gemini AI', 'OpenAI TTS', 'Supabase', 'WebSockets', 'Stripe'],
-    imageUrl: '/assets/serene/landing_page.png', 
+    imageUrl: '/assets/serene/landing_page.png',
     additionalImages: [
-        '/assets/serene/mobile_welcome.png',
-        '/assets/serene/setup_wizard.png',
-        '/assets/serene/dashboard_overview.png',
+      '/assets/serene/mobile_welcome.png',
+      '/assets/serene/setup_wizard.png',
+      '/assets/serene/dashboard_overview.png',
     ],
     x: 800,
     y: 850,
@@ -220,7 +215,7 @@ export const PROJECTS: Project[] = [
     results: 'Achieved 3 degrees of freedom movement and reliable pick-and-place operations.',
     context: 'Robotics requires a multidisciplinary approach combining mechanical design, electronics, and software control loops.',
     tags: ['Python', 'Raspberry Pi', '3D Printing', 'Robotics', 'CAD'],
-    imageUrl: '/assets/robot_arm/arm1.jpeg', // Path updated
+    imageUrl: '/assets/robot_arm/IMG_8317.jpeg',
     x: 1100,
     y: 850,
     type: 'IC',
@@ -238,7 +233,11 @@ export const PROJECTS: Project[] = [
     results: 'Maintained stable pH levels for 4 weeks without manual intervention, resulting in accelerated lettuce growth compared to soil control.',
     context: 'Sustainable agriculture relies on automation to maximize yield and minimize resource usage.',
     tags: ['IoT', 'ESP32', 'Sensors', 'Automation'],
-    imageUrl: '/assets/hydrponics/hydro1.jpeg', // Path updated to prompt spelling 'hydrponics' or standard
+    imageUrl: '/assets/Hydroponics/IMG_8239.jpeg',
+    additionalImages: [
+      '/assets/Hydroponics/IMG_8212.jpeg',
+      '/assets/Hydroponics/IMG_8339.jpeg'
+    ],
     x: 950,
     y: 1050,
     type: 'IC',
@@ -247,45 +246,59 @@ export const PROJECTS: Project[] = [
   }
 ];
 
-export const PASSIVES: Passive[] = []; 
+export const PASSIVES: Passive[] = [];
 
 export const WIRES: WirePath[] = [
   // --- BLOCK A Interconnects ---
   // U100 (Boeing) to U101 (FADEC) - Vertical Data Bus
-  { id: 'bus_a_1', points: "250,290 250,510", color: "#4fc3f7" },
+  { id: 'bus_a_1', points: "250,290 250,510", color: "var(--cad-bus)" },
   // U101 to U102 (Gannett) - Power Bus
-  { id: 'bus_a_2', points: "250,590 250,760", color: "#ffd700" },
+  { id: 'bus_a_2', points: "250,590 250,760", color: "var(--cad-wire)" },
+  // U100 to U102 - Direct Link
+  { id: 'bus_a_3', points: "190,290 190,760", color: "var(--cad-select)" },
 
   // --- BLOCK A to BLOCK B (Academic) ---
   // U100 -> U200 (Wireless)
-  { id: 'cross_1', points: "300,250 550,250 550,200 750,200", color: "#ff4081" },
+  { id: 'cross_1', points: "300,250 550,250 550,200 750,200", color: "var(--cad-select)" },
   // U101 -> U201 (Actuator)
-  { id: 'cross_2', points: "300,550 580,550 580,200 1050,200", color: "#ff4081" },
-  
+  { id: 'cross_2', points: "300,550 580,550 580,200 1050,200", color: "var(--cad-select)" },
+  // U102 -> U202 (Pololu)
+  { id: 'cross_3', points: "300,800 450,800 450,480 750,480", color: "var(--cad-bus)" },
+
   // --- BLOCK B Interconnects ---
   // U200 -> U202 (Pololu)
-  { id: 'acad_1', points: "850,240 850,440", color: "#4fc3f7" },
+  { id: 'acad_1', points: "850,240 850,440", color: "var(--cad-bus)" },
   // U201 -> J300 (Metal Det)
-  { id: 'acad_2', points: "1150,240 1150,440", color: "#ffd700" },
+  { id: 'acad_2', points: "1150,240 1150,440", color: "var(--cad-wire)" },
   // U202 -> J300 (Cross)
-  { id: 'acad_3', points: "850,480 1050,480", color: "#4fc3f7" },
+  { id: 'acad_3', points: "850,480 1050,480", color: "var(--cad-bus)" },
+  // U200 -> U201 (Top Link)
+  { id: 'acad_4', points: "850,160 1150,160", color: "var(--cad-select)" },
+  // U202 -> U201 (Diagonal-ish)
+  { id: 'acad_5', points: "850,520 950,520 950,240 1050,240", color: "var(--cad-wire)" },
 
   // --- BLOCK A/B to BLOCK C (Personal) ---
   // U102 -> U300 (Serene)
-  { id: 'pers_1', points: "300,800 500,800 500,850 750,850", color: "#ffd700" },
+  { id: 'pers_1', points: "300,800 500,800 500,850 750,850", color: "var(--cad-wire)" },
   // U200 -> U301 (Robotic Arm) - Logic link
-  { id: 'pers_2', points: "800,240 800,350 1300,350 1300,850 1150,850", color: "#ff4081" },
+  { id: 'pers_2', points: "800,240 800,350 1300,350 1300,850 1150,850", color: "var(--cad-select)" },
+  // J300 -> U301 (Metal Det to Arm)
+  { id: 'pers_5', points: "1150,520 1150,810", color: "var(--cad-bus)" },
 
   // --- BLOCK C Interconnects ---
   // U300 -> U302 (Hydro)
-  { id: 'pers_3', points: "850,890 850,1050 900,1050", color: "#4fc3f7" },
+  { id: 'pers_3', points: "850,890 850,1050 900,1050", color: "var(--cad-bus)" },
   // U301 -> U302
-  { id: 'pers_4', points: "1100,890 1100,1050 1000,1050", color: "#4fc3f7" },
+  { id: 'pers_4', points: "1100,890 1100,1050 1000,1050", color: "var(--cad-bus)" },
+  // U300 -> U301
+  { id: 'pers_6', points: "850,850 1050,850", color: "var(--cad-select)" },
 
   // --- External IO ---
-  { id: 'io_1', points: "200,250 50,250", color: "#808080" },
-  { id: 'io_2', points: "200,550 50,550", color: "#808080" },
-  { id: 'io_3', points: "1350,850 1150,850", color: "#ff4081" }
+  { id: 'io_1', points: "200,250 50,250", color: "var(--cad-text-muted)" },
+  { id: 'io_2', points: "200,550 50,550", color: "var(--cad-text-muted)" },
+  { id: 'io_3', points: "1350,850 1150,850", color: "var(--cad-select)" },
+  { id: 'io_4', points: "1350,200 1150,200", color: "var(--cad-text-muted)" },
+  { id: 'io_5', points: "1350,480 1150,480", color: "var(--cad-wire)" }
 ];
 
 export const FILE_TREE: FileNode[] = [
@@ -309,10 +322,10 @@ export const FILE_TREE: FileNode[] = [
         name: 'Academic_Projects',
         type: 'folder',
         children: [
-            { id: 'node_senior', name: 'U200: Wireless_Shift', type: 'file', projectId: 'wireless_shift' },
-            { id: 'node_tech', name: 'U201: Actuator_Ctrl', type: 'file', projectId: 'actuator_board' },
-            { id: 'node_pololu', name: 'U202: Pololu_Robot', type: 'file', projectId: 'pololu_bot' },
-            { id: 'node_junior', name: 'J300: Metal_Detector', type: 'file', projectId: 'metal_det' },
+          { id: 'node_senior', name: 'U200: Wireless_Shift', type: 'file', projectId: 'wireless_shift' },
+          { id: 'node_tech', name: 'U201: Actuator_Ctrl', type: 'file', projectId: 'actuator_board' },
+          { id: 'node_pololu', name: 'U202: Pololu_Robot', type: 'file', projectId: 'pololu_bot' },
+          { id: 'node_junior', name: 'J300: Metal_Detector', type: 'file', projectId: 'metal_det' },
         ]
       },
       {
@@ -320,9 +333,9 @@ export const FILE_TREE: FileNode[] = [
         name: 'Personal_Projects',
         type: 'folder',
         children: [
-            { id: 'node_serene', name: 'U300: Serene_AI', type: 'file', projectId: 'serene_ai' },
-            { id: 'node_arm', name: 'U301: Robotic_Arm', type: 'file', projectId: 'robotic_arm' },
-            { id: 'node_hydro', name: 'U302: Hydroponics', type: 'file', projectId: 'hydroponics' },
+          { id: 'node_serene', name: 'U300: Serene_AI', type: 'file', projectId: 'serene_ai' },
+          { id: 'node_arm', name: 'U301: Robotic_Arm', type: 'file', projectId: 'robotic_arm' },
+          { id: 'node_hydro', name: 'U302: Hydroponics', type: 'file', projectId: 'hydroponics' },
         ]
       },
       {
@@ -330,21 +343,21 @@ export const FILE_TREE: FileNode[] = [
         name: 'Assets',
         type: 'folder',
         children: [
-            {
-                id: 'assets_bike', name: 'Bike_System', type: 'folder', children: [
-                    { id: 'img_b1', name: 'bike1.jpeg', type: 'file' }
-                ]
-            },
-            {
-                id: 'assets_acb', name: 'Actuator_Board', type: 'folder', children: [
-                    { id: 'img_acb1', name: 'CAD.jpeg', type: 'file' }
-                ]
-            },
-            {
-                id: 'assets_cop', name: 'Metal_Detector', type: 'folder', children: [
-                    { id: 'img_cop1', name: 'copitts1.jpeg', type: 'file' }
-                ]
-            }
+          {
+            id: 'assets_bike', name: 'Bike_System', type: 'folder', children: [
+              { id: 'img_b1', name: 'bike1.jpeg', type: 'file' }
+            ]
+          },
+          {
+            id: 'assets_acb', name: 'Actuator_Board', type: 'folder', children: [
+              { id: 'img_acb1', name: 'CAD.jpeg', type: 'file' }
+            ]
+          },
+          {
+            id: 'assets_cop', name: 'Metal_Detector', type: 'folder', children: [
+              { id: 'img_cop1', name: 'copitts1.jpeg', type: 'file' }
+            ]
+          }
         ]
       },
       {
@@ -352,8 +365,8 @@ export const FILE_TREE: FileNode[] = [
         name: 'Libraries',
         type: 'folder',
         children: [
-            { id: 'lib_pas', name: 'passives.slb', type: 'file' },
-            { id: 'lib_ic', name: 'analog_ic.slb', type: 'file' },
+          { id: 'lib_pas', name: 'passives.slb', type: 'file' },
+          { id: 'lib_ic', name: 'analog_ic.slb', type: 'file' },
         ]
       }
     ]
