@@ -24,9 +24,58 @@ export const SchematicCanvas: React.FC<Props> = ({
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [lastMouse, setLastMouse] = useState({ x: 0, y: 0 });
+  const [lastTouchDist, setLastTouchDist] = useState<number | null>(null);
 
-  // Initial Center
-  // Initial Center - Zoom to Fit
+  const getTouchDistance = (touches: React.TouchList) => {
+    return Math.hypot(
+      touches[0].clientX - touches[1].clientX,
+      touches[0].clientY - touches[1].clientY
+    );
+  };
+
+  const getTouchCenter = (touches: React.TouchList) => {
+    return {
+      x: (touches[0].clientX + touches[1].clientX) / 2,
+      y: (touches[0].clientY + touches[1].clientY) / 2,
+    };
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setLastMouse({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    } else if (e.touches.length === 2) {
+      setIsDragging(false);
+      setLastTouchDist(getTouchDistance(e.touches));
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 1 && isDragging) {
+      const dx = e.touches[0].clientX - lastMouse.x;
+      const dy = e.touches[0].clientY - lastMouse.y;
+      setPan(prev => ({ x: prev.x + dx, y: prev.y + dy }));
+      setLastMouse({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    } else if (e.touches.length === 2 && lastTouchDist) {
+      const newDist = getTouchDistance(e.touches);
+      const scaleFactor = newDist / lastTouchDist;
+
+      // Calculate new scale with limits
+      const newScale = Math.min(Math.max(0.1, scale * scaleFactor), 5);
+      const effectiveScaleFactor = newScale / scale;
+
+      const center = getTouchCenter(e.touches);
+
+      // Adjust pan to zoom around the center
+      setPan(prev => ({
+        x: center.x - (center.x - prev.x) * effectiveScaleFactor,
+        y: center.y - (center.y - prev.y) * effectiveScaleFactor
+      }));
+
+      setScale(newScale);
+      setLastTouchDist(newDist);
+    }
+  };
   useEffect(() => {
     const padding = 20;
     // Estimate available space (accounting for sidebar ~300px and header/footer ~100px)
@@ -129,6 +178,8 @@ export const SchematicCanvas: React.FC<Props> = ({
     )
   }
 
+
+
   return (
     <div className={`flex-1 h-full w-full overflow-hidden bg-cad-bg relative font-mono ${getCursor()}`}>
 
@@ -139,13 +190,14 @@ export const SchematicCanvas: React.FC<Props> = ({
 
       <svg
         ref={svgRef}
-        className="w-full h-full block"
+        className="w-full h-full block touch-none" // Added touch-none to prevent browser scrolling
         onWheel={handleWheel}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        onTouchStart={() => setIsDragging(true)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
         onTouchEnd={() => setIsDragging(false)}
       >
         <defs>

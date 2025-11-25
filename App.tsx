@@ -193,6 +193,8 @@ const App: React.FC = () => {
       onZoomIn={handleZoomIn}
       onZoomOut={handleZoomOut}
       onSystemAction={handleSystemAction}
+      hideHeader={viewMode === ViewMode.DOCUMENTATION}
+      hideBottomPanel={viewMode === ViewMode.DOCUMENTATION}
       sidebar={
         <Sidebar
           nodes={FILE_TREE}

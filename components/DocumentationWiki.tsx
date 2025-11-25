@@ -13,6 +13,15 @@ export const DocumentationWiki: React.FC<Props> = ({ project, onBack, onClose, o
     // Lightbox State
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    // Reset scroll when project changes
+    useEffect(() => {
+        if (scrollRef.current) {
+            scrollRef.current.scrollTo(0, 0);
+        }
+    }, [project.id]);
+
     const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
         e.currentTarget.src = `https://placehold.co/800x600/1a1a1a/444444?text=Missing+Asset:+${project.refDes}`;
     };
@@ -39,7 +48,7 @@ export const DocumentationWiki: React.FC<Props> = ({ project, onBack, onClose, o
             )}
 
             {/* Modern Header */}
-            <div className="h-16 border-b border-[#222] flex items-center px-6 justify-between bg-[#0a0a0a]/80 backdrop-blur-md z-20 sticky top-0">
+            <div className="h-16 border-b border-[#222] flex items-center px-6 justify-between bg-[#0a0a0a] z-20 sticky top-0">
                 <div className="flex items-center gap-4">
                     <button
                         onClick={onBack}
@@ -64,6 +73,7 @@ export const DocumentationWiki: React.FC<Props> = ({ project, onBack, onClose, o
 
                 {/* Main Scroll Container */}
                 <div
+                    ref={scrollRef}
                     className="h-full overflow-y-auto scroll-smooth"
                 >
 
